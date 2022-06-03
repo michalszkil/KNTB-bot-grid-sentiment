@@ -202,13 +202,13 @@ client = Client(api_key,
                 private_key,
                  testnet=True) 
 
-engine = create_engine('sqlite:///' + 'transactions.db') 
-metadata = MetaData(engine)
-metadata.reflect()
+# engine = create_engine('sqlite:///' + 'transactions.db') 
+# metadata = MetaData(engine)
+# metadata.reflect()
 
-session_factory = sessionmaker(bind=engine)
-session_scoped_factory = scoped_session(session_factory)
-session = session_scoped_factory()
+# session_factory = sessionmaker(bind=engine)
+# session_scoped_factory = scoped_session(session_factory)
+# session = session_scoped_factory()
 
 print(client.get_account()['balances'])
 
@@ -268,7 +268,8 @@ try:
                 local_balance = update_local_balance(local_balance, 'SELL', symbol, round(order_value/current_price, 4), float(order['cummulativeQuoteQty']))
                 dump_local_balance(local_balance)
                 transactions[time.time()] = {'Type': 'SELL', 'Symbol': symbol, 'Quantity': round(order_value/current_price, 4), 'Trigger Price': current_price, 
-                'Transaction Price': order['fills'][0]['price'],'Quote quantity': order['cummulativeQuoteQty'], 'Binance Balance': balance, 'Local Balance': local_balance}
+                'Transaction Price': order['fills'][0]['price'],'Quote quantity': order['cummulativeQuoteQty'], 'Binance Balance': balance, 'Local Balance': local_balance, 
+                'Full Order': order, 'Sentiment': sentiment['submissions_and_comments'][len(sentiment)-1]}
                 dump_transactions(transactions)
                 dump_sentiment(sentiment)
                 commission_amount += fee_rate*order_value
@@ -297,7 +298,8 @@ try:
                 local_balance = update_local_balance(local_balance, 'BUY', symbol, round(order_value/current_price, 4), float(order['cummulativeQuoteQty']))
                 dump_local_balance(local_balance)
                 transactions[time.time()] = {'Type': 'BUY', 'Symbol': symbol, 'Quantity': round(order_value/current_price, 4), 'Price': current_price, 
-                'Transaction Price': order['fills'][0]['price'],'Quote quantity': order['cummulativeQuoteQty'], 'Binance Balance': balance, 'Local Balance': local_balance}
+                'Transaction Price': order['fills'][0]['price'],'Quote quantity': order['cummulativeQuoteQty'], 'Binance Balance': balance, 'Local Balance': local_balance, 
+                'Full Order': order, 'Sentiment': sentiment['submissions_and_comments'][len(sentiment)-1]}
                 dump_transactions(transactions)
                 dump_sentiment(sentiment)
                 commission_amount += fee_rate*order_value
